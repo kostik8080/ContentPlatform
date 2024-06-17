@@ -1,0 +1,47 @@
+{% extends 'menenger/base.html' %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="col-12">
+            <div class="row g-3 align-items-center">
+                <div class="col-3">
+                </div>
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="card mb-3 mt-4 box-shadow">
+                        <div class="card-header text-center mb-3">
+                            <h4 class="my-0 font-weight-normal mb-3 mt-2">Вход в систему</h4>
+                        </div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <p>
+                                <div class="mb-3 row">
+                                    <label for="id_username" class="col-sm-2 col-form-label">Email address:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" required="" aria-invalid="true" id="id_username">
+                                    </div>
+                                </div>
+                            </p>
+                            <p>
+                                <div class="mb-3 row">
+                                    <label for="id_password" class="col-sm-2 col-form-label">Password:</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="password" autocomplete="current-password" required="" aria-invalid="true" id="id_password">
+                                    </div>
+                                </div>
+                            </p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                <button class="btn btn-success me-md-2" type="submit">Войти</button>
+                                <a href="{% url 'users:password_reset' %}" class="btn btn-danger" type="button">Восстановить пароль</a>
+                            </div>
+                             <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-2">
+                                 <p><a href="{% url 'users:register' %}" class="link-secondary">Зарегистрироваться</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'menenger/base.html' %}
+{% load media_tags %}
+
+{% block content %}
+
+
+<div class="container justify-content-center">
+    <div class="row text-center">
+
+        <div class="col-12 mh-45">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+
+                </div>
+                <div class="card-body">
+
+                    <h2 class="card-title pricing-card-title">{{ object.title }}</h2>
+                    <img src="{{ object.photo|mymedia }}" alt="">
+                    <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                        <li class="mb-4">{{ object.content }}</li>
+                        <li class="text-start">Дата создания {{ object.created }}</li>
+                        <li class="text-start">Дата изменения {{ object.updated }}</li>
+
+                    </ul>
+                    <div class="card-footer">
+                        <h3>Количество просмотров: {{ object.count_views }}</h3>
+
+
+
+                        <hr>
+                        <a href="{% url 'menenger:home' %}" class="form-control btn btn-lg btn-block btn-outline-primary">На главную</a>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if user == object.author or user.is_staff %}
+                            <a href="{% url 'menenger:update' object.pk %}" type="button"
+                               class="form-control btn btn-lg btn-block btn-outline-primary mb-3">Изменить</a>
+                            <a href="{% url 'menenger:delete' object.pk %}"
+                               class="form-control btn btn-lg btn-block btn-outline-primary">Удалить</a>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    {% endblock %}

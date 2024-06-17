@@ -1,0 +1,105 @@
+{% extends 'menenger/base.html' %}
+{% load static %}
+{% load media_tags %}
+{% block content %}
+
+
+<main>
+
+    <div class="col-12 mt-3">
+        <div class="row">
+            {% for object in object_list %}
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="card mb-3" style="width: 900px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ object.photo|mymedia }}" class="img-fluid rounded-start mt-3" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div><h3 class="card-title">{{ object.title }}</h3></div>
+                                <p class="card-text">{{ object.content | truncatechars:100}}</p>
+                                <a href="{% url 'menenger:detail' object.pk %}" type="button"
+                                   class="form-control btn btn-lg btn-block btn-outline-primary mb-3">Подробнее</a>
+                                {% if user.is_authenticated %}
+                                <form action="{% url 'menenger:like_view' object.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark" id="like-button">
+                                        НРАВИТСЯ
+                                        {{ object.like_count }}
+                                    </button>
+
+                                </form>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+</main>
+
+<script>
+    // Получаем состояние лайка из localStorage при загрузке страницы
+    var likeButton = document.getElementById('like-button');
+    var isLiked = localStorage.getItem('isLiked');
+    if (isLiked === 'true') {
+        likeButton.classList.add('liked');
+        likeButton.querySelector('svg').setAttribute('fill', 'currentColor'); // Здесь меняем fill на currentColor
+    } else {
+        likeButton.querySelector('svg').setAttribute('fill', 'red'); // Здесь меняем fill на red
+    }
+
+    // Обработчик события клика по кнопке
+    likeButton.addEventListener('click', function() {
+        // Изменяем состояние лайка
+        this.classList.toggle('liked');
+        var heartIcon = this.querySelector('svg');
+        if (this.classList.contains('liked')) {
+            heartIcon.setAttribute('fill', 'currentColor');
+            // Сохраняем состояние лайка в localStorage
+            localStorage.setItem('isLiked', 'true');
+        } else {
+            heartIcon.setAttribute('fill', 'red');
+            // Удаляем состояние лайка из localStorage
+            localStorage.removeItem('isLiked');
+        }
+    });
+</script>
+{% endblock %}
+{% block navigation %}
+{% if page_obj.has_other_pages %}
+<nav class="list-pages">
+    <ul>
+        {% if page_obj.has_previous %}
+        <li class="page-num ">
+            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+        </li>
+        {% endif %}
+
+        {% for p in paginator.page_range %}
+        {% if page_obj.number == p %}
+        <li class="page-num page-num-selected">{{ p }}</li>
+        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+        <li class="page-num">
+            <a href="?page={{ p }}">{{ p }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-num">
+            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
+
+

@@ -1,0 +1,12 @@
+#like {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  background-image: url('static/img_1.png');
+}
+
+.heart-button.active {
+  background-image: url('static/img_2.png');
+}
