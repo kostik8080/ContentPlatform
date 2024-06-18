@@ -36,8 +36,10 @@
     <li class="nav-item">
         <a href="{% url 'menenger:subscribe' %}" class="btn ">Подписка</a>
     </li>
+    {% if user.is_staff %}
     <li class="nav-item">
         <a href="{% url 'menenger:nopublish' %}" class="btn ">Не опубликованные</a>
     </li>
+    {% endif %}
 
 </ul>

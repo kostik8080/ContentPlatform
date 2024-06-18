@@ -22,8 +22,9 @@
                                 <p class="card-text">{{ object.content | truncatechars:100}}</p>
                                 <a href="{% url 'menenger:detail' object.pk %}" type="button"
                                    class="form-control btn btn-lg btn-block btn-outline-primary mb-3">Подробнее</a>
-                                {% if user.is_authenticated %}
-                                <form action="{% url 'menenger:like_view' object.pk %}" method="POST">
+
+                                {% if user.is_authenticated and user.is_subscribed %}
+                                <form action="{% url 'menenger:like_view' object.pk page_obj.number %}" method="POST">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-dark" id="like-button">
                                         НРАВИТСЯ
@@ -71,34 +72,31 @@
     });
 </script>
 {% endblock %}
+
 {% block navigation %}
 {% if page_obj.has_other_pages %}
-<nav class="list-pages">
-    <ul>
-        {% if page_obj.has_previous %}
-        <li class="page-num ">
-            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
-        </li>
-        {% endif %}
+    <div class="container d-flex justify-content-center">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group" role="group" aria-label="First group">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">&lt;</a>
+            {% endif %}
 
-        {% for p in paginator.page_range %}
-        {% if page_obj.number == p %}
-        <li class="page-num page-num-selected">{{ p }}</li>
-        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
-        <li class="page-num">
-            <a href="?page={{ p }}">{{ p }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
+            {% for p in paginator.page_range %}
+                {% if page_obj.number == p %}
+                    <!-- Add the center class to the active page number -->
+                    <a href="?page={{ p }}" class="btn btn-primary center active">{{ p }}</a>
+                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                    <a href="?page={{ p }}" class="btn btn-primary">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
 
-        {% if page_obj.has_next %}
-        <li class="page-num">
-            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">&gt;</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endif %}
 {% endblock %}
 

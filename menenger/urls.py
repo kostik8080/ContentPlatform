@@ -17,5 +17,5 @@ urlpatterns = [
     path('subcribt/', payment_stripe, name='subscribe'),
     path('success/', TemplateView.as_view(template_name='menenger/success.html'), name='success'),
     path('cancel/', TemplateView.as_view(template_name='menenger/cancel.html'), name='cancel'),
-    path('home/<int:pk>/like/', like_view, name='like_view'),
+    path('home/<int:pk>/<int:page>/like/', like_view, name='like_view'),
 ]

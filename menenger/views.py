@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from urllib.parse import urlencode
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DetailView, DeleteView
 
 from menenger.forms import ContentForm, PublishedContentForm
@@ -34,7 +35,7 @@ class ContentCreateView(CreateView):
 class HomeView(ListView):
     model = Content
     template_name = 'menenger/home.html'
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self, queryset=None):
         # Filter the queryset to include only published posts
@@ -49,6 +50,7 @@ class HomeView(ListView):
 class NoPublishView(ListView):
     model = Content
     template_name = 'menenger/home.html'
+    paginate_by = 5
 
     def get_queryset(self, queryset=None):
         # Filter the queryset to include only published posts
@@ -96,6 +98,13 @@ class ContentDeleteView(DeleteView):
     model = Content
     success_url = reverse_lazy('menenger:home')
 
+    def get_object(self, queryset=None): # Получение объекта контента
+        self.object  = super().get_object(queryset)
+        if not self.request.user.is_authenticated or not self.request.user == self.object.author:
+            raise PermissionDenied
+
+
+
 
 def payment_stripe(request):
     if request.user.is_authenticated:
@@ -114,10 +123,12 @@ def payment_stripe(request):
             return HttpResponsePermanentRedirect(sub.payment_url)
         else:
             raise PermissionDenied
+    else:
+        raise PermissionDenied
 
 
-def like_view(request, pk):
-    if request.user.is_authenticated:
+def like_view(request, pk, page):
+    if request.user.is_authenticated and request.user.is_subscribed:
         # Получаем объект контента на основе pk
         content = Content.objects.get(pk=pk)
 
@@ -128,14 +139,12 @@ def like_view(request, pk):
             # Если пользователь уже поставил лайк контенту, удаляем лайк
             Like.objects.filter(user=request.user, content=content).delete()
             # Удаляем состояние лайка из сессии для пользователя
-            del request.session['isLiked_' + str(request.user.pk)]
+
         else:
             # Если пользователь еще не поставил лайк контенту, создаем новый лайк
             Like.objects.create(user=request.user, content=content, like=True)
             # Сохраняем состояние лайка в сессии для пользователя
-            request.session['isLiked_' + str(request.user.pk)] = 'true'
 
-        # Пересчитываем количество лайков
-        like_count = Like.objects.filter(content=content).count()
 
-        return redirect(reverse('menenger:home'))
+        return redirect(reverse('menenger:home')+f'?page={page}')
+
