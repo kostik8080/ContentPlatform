@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+
 from django.test import TestCase
 from django.urls import reverse
 from http import HTTPStatus
@@ -67,14 +67,8 @@ class RegisterUserTestCase(TestCase):
             'password1': '12345',
             'password2': '12345'
         }
-        user_model = get_user_model()
+
         path = reverse('users:register')
         response = self.client.post(path, data)
         print(response.status_code)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-
-
-
-
-
-

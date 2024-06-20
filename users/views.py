@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -52,7 +52,6 @@ class UserPasswordReset(PasswordResetConfirmView):
     template_name = "users/password_reset_confirm.html"
 
 
-
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
@@ -65,8 +64,6 @@ def activate(request, uidb64, token):
 
         user.save()
 
-        #group = Group.objects.get(name='Право на изменение')
-        #user.groups.add(group)
         return redirect(reverse('users:register_done'))
     else:
         return redirect(reverse('users:register_error'))

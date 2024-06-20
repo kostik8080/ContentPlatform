@@ -26,9 +26,6 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
         return clean_data
 
 
-
-
-
 class UserUpdateForm(StyleFormMixin, UserChangeForm):
     class Meta:
         model = User

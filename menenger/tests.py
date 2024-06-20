@@ -86,4 +86,3 @@ class ContentFormTestCase(TestCase):
         print(response.status_code)
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('menenger:home'))
-

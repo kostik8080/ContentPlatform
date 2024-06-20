@@ -1,45 +1,58 @@
 {% load media_tags %}
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/">Главная</a>
-    </li>
-    <li class="nav-item dropdown">
 
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Пользователь</a>
-        <ul class="dropdown-menu center">
-            {% if user.is_authenticated %}
-            <li>
-                <form method="post" enctype="multipart/form-data" action="{% url 'users:logout' %}">
-                    {% csrf_token %}
-                    <div style="display: flex;">
+
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Главная</a>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-expanded="false">Пользователь</a>
+                    <ul class="dropdown-menu center">
                         {% if user.is_authenticated %}
-                          <img src="{{ user.avatar|mymedia }}" alt="" width="45" height="45" class="rounded-circle me-2">
+                        <li>
+                            <form method="post" enctype="multipart/form-data" action="{% url 'users:logout' %}">
+                                {% csrf_token %}
+                                <div style="display: flex;">
+                                    {% if user.is_authenticated %}
+                                    <img src="{{ user.avatar|mymedia }}" alt="" width="45" height="45"
+                                         class="rounded-circle me-2">
+                                    {% endif %}
+                                    <p class="text-center">{{ user.first_name }} {{user.last_name}}</p>
+                                </div>
+                                <button class="dropdown-item" type="submit">Выйти из профиля</button>
+                            </form>
+                            <a class="dropdown-item" href="{% url 'users:profile' %}">Изменить профиль</a>
+                            <a class="dropdown-item" href="{% url 'users:delete' user.pk %}">удалить профиль</a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'users:login' %}">Войти в профиль</a>
+                            <a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a>
+                        </li>
                         {% endif %}
-                        <p class="text-center">{{ user.first_name }} {{user.last_name}}</p>
-                    </div>
-                    <button class="dropdown-item" type="submit">Выйти из профиля</button>
-                </form>
-                <a class="dropdown-item" href="{% url 'users:profile' %}">Изменить профиль</a>
-                <a class="dropdown-item" href="{% url 'users:delete' user.pk %}">удалить профиль</a>
-            </li>
-            {% else %}
-            <li>
-                <a class="dropdown-item" href="{% url 'users:login' %}">Войти в профиль</a>
-                <a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a>
-            </li>
-            {% endif %}
-        </ul>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'menenger:content_create' %}" class="btn ">Добавить Пост</a>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'menenger:subscribe' %}" class="btn ">Подписка</a>
-    </li>
-    {% if user.is_staff %}
-    <li class="nav-item">
-        <a href="{% url 'menenger:nopublish' %}" class="btn ">Не опубликованные</a>
-    </li>
-    {% endif %}
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'menenger:content_create' %}" class="btn ">Добавить Пост</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'menenger:subscribe' %}" class="btn ">Подписка</a>
+                </li>
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a href="{% url 'menenger:nopublish' %}" class="btn ">Не опубликованные</a>
+                </li>
+                {% endif %}
 
-</ul>
+            </ul>
+        </div>
+
+    </div>
+</nav>

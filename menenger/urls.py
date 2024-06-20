@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from menenger.apps import MenengerConfig
 from menenger.views import HomeView, ContentCreateView, ContentUpdateView, ContentDetailView, ContentDeleteView, \
-    payment_stripe, like_view, NoPublishView
+    payment_stripe, like_view, NoPublishView, search_view
 
 app_name = MenengerConfig.name
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path('success/', TemplateView.as_view(template_name='menenger/success.html'), name='success'),
     path('cancel/', TemplateView.as_view(template_name='menenger/cancel.html'), name='cancel'),
     path('home/<int:pk>/<int:page>/like/', like_view, name='like_view'),
+    path('search/', search_view, name='search'),
 ]

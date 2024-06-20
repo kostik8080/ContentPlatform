@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 NULLABLE = {'null': True, 'blank': True}
@@ -20,7 +20,8 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars', **NULLABLE)
     post_count = models.IntegerField(default=0)
 
-    is_subscribed = models.OneToOneField(to=Subscription, on_delete=models.CASCADE, verbose_name='Подписка',  **NULLABLE)
+    is_subscribed = models.OneToOneField(to=Subscription, on_delete=models.CASCADE,
+                                         verbose_name='Подписка',  **NULLABLE)
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['email']

@@ -1,8 +1,8 @@
 import stripe
 from django.conf import settings
-from users.models import Subscription
 
 stripe.api_key = settings.STRIPE_KEYS
+
 
 def create_stripe_subcriptions(instance):
     new_subscription = f'подписка № {instance.id}'
@@ -32,4 +32,3 @@ def create_stripe_session(price):
 
     )
     return session.get('id'), session.get('url')
-

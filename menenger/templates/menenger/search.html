@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-6">
              <form class="d-flex" action="{% url 'menenger:search' %}" method="get">
-                {{ search_form.search }}
+                {{ search_field.search }}
                 <button class="btn btn-outline-success ms-2" type="submit">Search</button>
             </form>
         </div>
@@ -17,7 +17,7 @@
 
     <div class="col-12 mt-3">
         <div class="row">
-            {% for object in object_list %}
+            {% for object in content %}
             <div class="col-3"></div>
             <div class="col-6">
                 <div class="card mb-3" style="width: 900px;">
@@ -32,16 +32,6 @@
                                 <a href="{% url 'menenger:detail' object.pk %}" type="button"
                                    class="form-control btn btn-lg btn-block btn-outline-primary mb-3">Подробнее</a>
 
-                                {% if user.is_authenticated and user.is_subscribed %}
-                                <form action="{% url 'menenger:like_view' object.pk page_obj.number %}" method="POST">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-dark" id="like-button">
-                                        НРАВИТСЯ
-                                        {{ object.like_count }}
-                                    </button>
-
-                                </form>
-                                {% endif %}
 
                             </div>
                         </div>
@@ -53,33 +43,6 @@
 
 </main>
 
-<script>
-    // Получаем состояние лайка из localStorage при загрузке страницы
-    var likeButton = document.getElementById('like-button');
-    var isLiked = localStorage.getItem('isLiked');
-    if (isLiked === 'true') {
-        likeButton.classList.add('liked');
-        likeButton.querySelector('svg').setAttribute('fill', 'currentColor'); // Здесь меняем fill на currentColor
-    } else {
-        likeButton.querySelector('svg').setAttribute('fill', 'red'); // Здесь меняем fill на red
-    }
-
-    // Обработчик события клика по кнопке
-    likeButton.addEventListener('click', function() {
-        // Изменяем состояние лайка
-        this.classList.toggle('liked');
-        var heartIcon = this.querySelector('svg');
-        if (this.classList.contains('liked')) {
-            heartIcon.setAttribute('fill', 'currentColor');
-            // Сохраняем состояние лайка в localStorage
-            localStorage.setItem('isLiked', 'true');
-        } else {
-            heartIcon.setAttribute('fill', 'red');
-            // Удаляем состояние лайка из localStorage
-            localStorage.removeItem('isLiked');
-        }
-    });
-</script>
 {% endblock %}
 
 {% block navigation %}

@@ -24,3 +24,10 @@ class PublishedContentForm(StyleFormMixin, forms.ModelForm):
         model = Content
         fields = ('published',)
 
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder':  'Поиск'}
+        )
+    )
