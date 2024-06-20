@@ -27,9 +27,7 @@ class UserRegisterView(CreateView):
 
         return super().form_valid(form)
 
-    def form_invalid(self, form):
-        form = UserRegisterForm
-        return super().form_invalid(form)
+
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
