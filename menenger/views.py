@@ -135,7 +135,7 @@ class ContentDeleteView(DeleteView):
     def get_object(self, queryset=None):  # Получение объекта контента
         self.object = super().get_object(queryset)
         if (not self.request.user.is_authenticated or not self.request.user == self.object.author and
-                self.request.user.is_subscribed):
+                not self.request.user.is_subscribed):
             raise PermissionDenied("Вы не являетесь автором этого объекта.")
         return self.object
 
