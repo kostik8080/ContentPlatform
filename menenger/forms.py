@@ -16,7 +16,7 @@ class ContentForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Content
 
-        exclude = ('author', 'count_views', 'published',)
+        exclude = ('author', 'count_views', 'published', 'is_paid')
 
 
 class PublishedContentForm(StyleFormMixin, forms.ModelForm):

@@ -29,6 +29,7 @@ class ContentCreateView(CreateView):
             if self.request.user.is_authenticated and self.request.user.is_subscribed:
                 new_mat.author = self.request.user
                 new_mat.published = True
+                new_mat. is_paid = True
                 new_mat.save()
             else:
                 new_mat.save()

@@ -26,6 +26,11 @@
                             <img src="{{ object.photo|mymedia }}" class="img-fluid rounded-start mt-3" alt="...">
                         </div>
                         <div class="col-md-8">
+                            {% if object.is_paid == True %}
+                                <div class="card_paid center ms-2"><h3 class="text-bg-success">Тариф: Платный</h3></div>
+                            {% else %}
+                                <div class="card_paid center ms-3"><h3 class="text-bg-info">Тариф: Бесплатный</h3></div>
+                            {% endif %}
                             <div class="card-body">
                                 <div><h3 class="card-title">{{ object.title }}</h3></div>
                                 <p class="card-text">{{ object.content | truncatechars:100}}</p>
